@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Static Prediction Website</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            background-color: #f7f7f7;
+            margin: 0;
+        }
+        .container {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            text-align: center;
+            width: 400px;
+        }
+        input, select, button {
+            width: 100%;
+            margin: 10px 0;
+            padding: 10px;
+            font-size: 16px;
+        }
+        button {
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #45a049;
+        }
+        #result {
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Static Prediction</h1>
+        <label for="input-data">Enter input data (comma-separated):</label>
+        <input type="text" id="input-data" placeholder="10,20,30,40,50">
+        
+        <label for="model-select">Select a Model:</label>
+        <select id="model-select">
+            <option value="linear">Linear Regression</option>
+        </select>
+
+        <button onclick="makePrediction()">Predict</button>
+
+        <div id="result">
+            <h2>Prediction Result:</h2>
+            <p id="output">N/A</p>
+        </div>
+    </div>
+
+    <script>
+        // 模拟线性回归模型
+        const linearModelWeights = [1.2, -0.8, 0.5, 0.3, -0.6];
+        const linearModelIntercept = 2.0;
+
+        // 线性回归预测函数
+        function predictLinearRegression(input) {
+            if (input.length !== linearModelWeights.length) {
+                throw new Error("Input size does not match model size.");
+            }
+
+            let prediction = linearModelIntercept;
+            for (let i = 0; i < input.length; i++) {
+                prediction += input[i] * linearModelWeights[i];
+            }
+            return prediction;
+        }
+
+        // 主预测逻辑
+        function makePrediction() {
+            const inputField = document.getElementById("input-data");
+            const modelSelect = document.getElementById("model-select");
+            const outputField = document.getElementById("output");
+
+            // 获取用户输入的数据
+            const rawInput = inputField.value.split(",");
+            const inputData = rawInput.map(Number);
+
+            try {
+                let prediction;
+
+                // 根据选择的模型进行预测
+                if (modelSelect.value === "linear") {
+                    prediction = predictLinearRegression(inputData);
+                } else {
+                    throw new Error("Unsupported model selected.");
+                }
+
+                // 显示预测结果
+                outputField.textContent = `Predicted Value: ${prediction.toFixed(2)}`;
+            } catch (error) {
+                outputField.textContent = `Error: ${error.message}`;
+            }
+        }
+    </script>
+</body>
+</html>
